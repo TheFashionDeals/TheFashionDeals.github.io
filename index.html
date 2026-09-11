@@ -397,7 +397,7 @@
 
         <!-- DYNAMIC DEALS CONTAINER -->
         <div class="deals-grid" id="dealsContainer">
-            <!-- Loading Skeleton / JavaScript will populate this in real-time -->
+            <!-- Loading -->
             <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
                 <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
                 <p style="margin-top: 10px; font-weight: 600;">Loading latest live Amazon deals...</p>
@@ -427,7 +427,7 @@
                 </div>
             </a>
             <a href="https://thefashiondeals.com/deals/mens-fashion/clothing" class="cat-card">
-                <div class="cat-info">👔</div>
+                <div class="cat-icon">👔</div>
                 <div class="cat-info">
                     <h4>Men's Clothing</h4>
                     <p>Shirts, Jackets & Suits</p>
@@ -481,7 +481,7 @@
         <p style="margin-top: 14px; font-size: 11px;">© 2026 TheFashionDeals. All rights reserved.</p>
     </footer>
 
-    <!-- LIVE DATA FETCH JAVASCRIPT (100% GÜVENLİ & DİNAMİK) -->
+    <!-- LIVE DATA FETCH JAVASCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const container = document.getElementById('dealsContainer');
@@ -492,7 +492,7 @@
                 if (!response.ok) throw new Error('Network response failed');
                 
                 const data = await response.json();
-                const deals = data.deals || [];
+                const deals = data.items || data.deals || [];
 
                 if (deals.length === 0) {
                     throw new Error('No deals found');
@@ -503,7 +503,7 @@
                     const discount = deal.discount_percentage ? `-${deal.discount_percentage}% OFF` : 'DEAL';
                     const brand = deal.brand || 'Amazon Fashion';
                     const currentPrice = deal.current_price ? `$${parseFloat(deal.current_price).toFixed(2)}` : '$0.00';
-                    const originalPrice = deal.original_price && deal.original_price > deal.current_price ? `$${parseFloat(deal.original_price).toFixed(2)}` : '';
+                    const originalPrice = deal.original_price && parseFloat(deal.original_price) > parseFloat(deal.current_price) ? `$${parseFloat(deal.original_price).toFixed(2)}` : '';
                     
                     return `
                         <div class="deal-card">
@@ -528,7 +528,6 @@
 
             } catch (err) {
                 console.warn('Live deals fetch error:', err);
-                // Fallback: Doğrudan ana siteye yönlendiren şık buton göster
                 container.innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 30px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px;">
                         <h3 style="font-size: 18px; margin-bottom: 8px;">Explore Verified Fashion Deals</h3>
